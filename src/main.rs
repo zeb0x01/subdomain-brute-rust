@@ -15,7 +15,7 @@ fn main() {
         let (target, file_path) = parse_config(&args);
         read_file(target, file_path);
     } else {
-        print!("Error provide target and wordlist args");
+        print!("Usage: ./target/debug/subdomain-brute-rust <target> <file_path>");
     }
 }
 
