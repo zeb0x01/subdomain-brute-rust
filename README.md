@@ -14,6 +14,11 @@ Need to have rust installed in your system.
 
 
 *To run*
+
+> cargo run -- facebook.com wordlist.txt
+
+or run it from built binary;
+
 > ./target/debug/subdomain-brute-rust target.com ~wordlist.txt
 
 
