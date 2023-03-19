@@ -1,2 +1,8 @@
 www
 chat
+support
+signup
+login
+dev
+developers
+admin
