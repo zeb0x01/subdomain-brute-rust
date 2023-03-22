@@ -1,4 +1,6 @@
 #![allow(unused)]
+
+extern crate dns_lookup;
 use dns_lookup::lookup_host;
 pub fn dns_queries(target: &str) -> bool {
     let ips = lookup_host(target);
@@ -9,6 +11,7 @@ pub fn dns_queries(target: &str) -> bool {
             }
         }
         Err(e) => {
+            // println!("{}: {}", target, e);
             return false;
         }
     }
