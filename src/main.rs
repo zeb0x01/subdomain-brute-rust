@@ -11,7 +11,7 @@ fn main() {
     let args: Vec<String> = env::args().collect();
     if args.len() == 3 {
         let (target, file_path) = parse_config(&args);
-        print_lines_in_groups_of_five(target, file_path);
+        read_file(target, file_path);
         // read_file(target, file_path);
     }
     else {
@@ -34,7 +34,7 @@ fn parse_config(args: &[String]) -> (&str, &str) {
 //     }
 // }
 
-fn print_lines_in_groups_of_five(target: &str, filename: &str) {
+fn read_file(target: &str, filename: &str) {
     if let Ok(file) = File::open(filename) {
         let reader = BufReader::new(file);
 
