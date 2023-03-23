@@ -1,10 +1,9 @@
-#![allow(unused)]
 #![allow(special_module_name)]
 
 use std::env;
 use std::fs;
-use std::fs::File;
-use std::io::{BufRead, BufReader};
+use std::thread;
+use std::time::Duration;
 
 mod lib;
 fn main() {
@@ -25,38 +24,23 @@ fn parse_config(args: &[String]) -> (&str, &str) {
     (query, file_path)
 }
 
-// fn read_file(target: &str, file_path: &str) {
-//     let content = fs::read_to_string(file_path).expect("Exceptions");
-//     for line in content.lines() {
-//         let new_target = format!("{}.{}", line, target);
-//         // use await 
-//         lib::dns_queries(&new_target);
-//     }
-// }
 
 fn read_file(target: &str, filename: &str) {
-    if let Ok(file) = File::open(filename) {
-        let reader = BufReader::new(file);
-
-        let mut lines: Vec<String> = Vec::new();
-        for line in reader.lines() {
-            if let Ok(line) = line {
-                lines.push(line);
-                if lines.len() == 5000 {
-                    for line in &lines {
-                        let new_target = format!("{}.{}", line, target);
-                        lib::dns_queries(&new_target);
-                    }
-                }
+    let content = fs::read_to_string(filename).expect("Something went wrong reading the file");
+    let lines: Vec<&str> = content.lines().collect();
+    let mut threads = vec![];
+    for line in lines {
+        let target = target.to_string();
+        let line = line.to_string();
+        let handle = thread::spawn(move || {
+            let target = line + "." + &target;
+            let result = lib::dns_queries(&target);
+            if result {
+                println!("{}", target);
             }
-        }
-        if !lines.is_empty() {
-            for line in &lines {
-                let new_target = format!("{}.{}", line, target);
-                lib::dns_queries(&new_target);
-            }
-        }
-    } else {
-        eprintln!("Error: could not open file {}", filename);
+        });
+        threads.push(handle);
+        thread::sleep(Duration::from_millis(1));
     }
+
 }
